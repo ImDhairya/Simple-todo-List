@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuid4 } from "uuid";
 import "./App.css";
 import List from "./components/List/List";
 import { ListItem } from "@mui/material";
 
 function App() {
+  const localStorageKey = "key";
   const [text, setText] = useState("");
-  const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState(() => {
+    return JSON.parse(localStorage.getItem(localStorageKey)) || [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(todoList));
+  }, [todoList]);
 
   const addItem = () => {
     const newTodoItem = {
@@ -23,13 +30,19 @@ function App() {
     setTodoList(newTodoItem);
   };
 
+  const deleteAll = () => {
+    setTodoList([]);
+  };
+
   const handleToggle = (itemId) => {
     const newTodoItem = todoList.map((listItem) => {
       if (listItem.id === itemId) {
-        
+        return { ...listItem, done: !listItem.done };
       }
-    })
-  }
+      return listItem;
+    });
+    setTodoList(newTodoItem);
+  };
   // console.log(todoList);
 
   return (
@@ -47,7 +60,12 @@ function App() {
         </div>
 
         {todoList.length > 0 && (
-          <List todoList={todoList} handleDelete={handleDelete} />
+          <List
+            todoList={todoList}
+            handleDelete={handleDelete}
+            handleToggle={handleToggle}
+            deleteAll={deleteAll}
+          />
         )}
       </div>
     </>
