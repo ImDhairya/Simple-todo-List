@@ -23,13 +23,19 @@ function App() {
     setTodoList(newTodoItem);
   };
 
+  const deleteAll = () => {
+    setTodoList([]);
+  }
+
   const handleToggle = (itemId) => {
     const newTodoItem = todoList.map((listItem) => {
       if (listItem.id === itemId) {
-        
+        return { ...listItem, done: !listItem.done };
       }
-    })
-  }
+      return listItem;
+    });
+    setTodoList(newTodoItem);
+  };
   // console.log(todoList);
 
   return (
@@ -47,7 +53,12 @@ function App() {
         </div>
 
         {todoList.length > 0 && (
-          <List todoList={todoList} handleDelete={handleDelete} />
+          <List
+            todoList={todoList}
+            handleDelete={handleDelete}
+            handleToggle={handleToggle}
+            deleteAll={deleteAll}
+          />
         )}
       </div>
     </>

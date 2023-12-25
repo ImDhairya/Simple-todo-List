@@ -32,3 +32,16 @@
 .iec{
   font-size: xx-small;
 }
+
+span{
+  display: flex;
+  flex-direction: column;
+}
+
+.butt{
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 10px;
+  background-color: #fff;
+}
